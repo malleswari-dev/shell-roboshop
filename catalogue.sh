@@ -8,6 +8,8 @@ N="\e[0m"
 USERID=$(id -u)
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
+SCRIPT_DIR=$PWD
+MONGODB_HOST=mongodb.malleswari.fun
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 # /var/log/shell-practice/16-logs/log
 
@@ -62,7 +64,7 @@ VALIDATE $? "unzip code"
 npm install &>> LOG_FILE
 VALIDATE $? "install dependencies" 
 
-cp catalogue.service /etc/systemd/system/catalogue.service &>> LOG_FILE
+cp $SCRIPT_DIR catalogue.service /etc/systemd/system/catalogue.service &>> LOG_FILE
 VALIDATE $? "copy systemctl service"
 
 systemctl daemon-reload
@@ -72,13 +74,13 @@ VALIDATE $? "enable catologue"
 systemctl start catalogue
 VALIDATE $? "start catalogue"
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo &>> LOG_FILE
+cp $SCRIPT_DIR mongo.repo /etc/yum.repos.d/mongo.repo &>> LOG_FILE
 VALIDATE $? "copy mongo repo"
 
 dnf install mongodb-mongosh -y &>> LOG_FILE
 VALIDATE $? "install mongodb client"
 
-mongosh --host MONGODB-SERVER-IPADDRESS </app/db/master-data.js &>> LOG_FILE
+mongosh --host MONGODB_HOST </app/db/master-data.js &>> LOG_FILE
 VALIDATE $? "load catalogue products"
 
 systemctl restart catalogue
