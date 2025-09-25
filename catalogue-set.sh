@@ -28,7 +28,7 @@ fi
 dnf module disable nodejs -y &>>$LOG_FILE
 dnf module enable nodejs:20 -y  &>>$LOG_FILE
 dnf install nodejs -y &>>$LOG_FILE
-#echo -e "Installing NodeJS 20 ... $G SUCCESS $N"
+echo -e "Installing NodeJS 20 ... $G SUCCESS $N"
 
 id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]; then
@@ -46,10 +46,10 @@ npm install &>>$LOG_FILE
 cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 systemctl daemon-reload
 systemctl enable catalogue &>>$LOG_FILE
-#echo -e "Catalogue application setup ... $G SUCCESS $N"
+echo -e "Catalogue application setup ... $G SUCCESS $N"
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
-dnf install mongodb-mongoshsfds -y &>>$LOG_FILE
+dnf install mongodb-mongosh -y &>>$LOG_FILE
 
 INDEX=$(mongosh mongodb.daws86s.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
 if [ $INDEX -le 0 ]; then
@@ -59,4 +59,4 @@ else
 fi
 
 systemctl restart catalogue
-#echo -e "Loading products and restarting catalogue ... $G SUCCESS $N"
+echo -e "Loading products and restarting catalogue ... $G SUCCESS $N"
