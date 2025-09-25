@@ -74,4 +74,4 @@ mongosh --host MONGODB-SERVER-IPADDRESS </app/db/master-data.js &>> LOG_FILE
 VALIDATE $? "load catalogue products"
 
 systemctl restart catalogue
-VALIDATE $? "restart catalogue
+VALIDATE $? "restart catalogue"
