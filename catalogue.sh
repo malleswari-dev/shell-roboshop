@@ -64,7 +64,7 @@ VALIDATE $? "unzip code"
 npm install &>> LOG_FILE
 VALIDATE $? "install dependencies" 
 
-cp $SCRIPT_DIR catalogue.service /etc/systemd/system/catalogue.service &>> LOG_FILE
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>> LOG_FILE
 VALIDATE $? "copy systemctl service"
 
 systemctl daemon-reload
@@ -74,7 +74,7 @@ VALIDATE $? "enable catologue"
 systemctl start catalogue
 VALIDATE $? "start catalogue"
 
-cp $SCRIPT_DIR mongo.repo /etc/yum.repos.d/mongo.repo &>> LOG_FILE
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo &>> LOG_FILE
 VALIDATE $? "copy mongo repo"
 
 dnf install mongodb-mongosh -y &>> LOG_FILE
