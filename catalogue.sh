@@ -30,19 +30,19 @@ VALIDATE () {
     fi
 }
 
-dnf module disable nodejs -y &>> LOG_FILE
+dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "disable nodejs"
 
-dnf module enable nodejs:20 -y &>> LOG_FILE
+dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "enable nodejs"
 
-dnf install nodejs -y &>> LOG_FILE
+dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "install nodejs"
 
-id roboshop &>> LOG_FILE
+id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]; then
-    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>> LOG_FILE
-    VALIDATE $? "creating system user" &>> LOG_FILE
+    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+    VALIDATE $? "creating system user" &>>$LOG_FILE
 else
 echo -e " user is already exist ... $Y SKIPPING $N"
 fi
@@ -50,7 +50,7 @@ fi
 mkdir -p /app 
 VALIDATE $? "creating app directory"
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>> LOG_FILE
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "download code"
 cd /app
 VALIDATE $? "changing app directory" 
@@ -58,26 +58,26 @@ VALIDATE $? "changing app directory"
 rm -rf /app/*
 VALIDATE $? "remove old code"
 
-unzip /tmp/catalogue.zip &>> LOG_FILE
+unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzip code"
 
-npm install &>> LOG_FILE
+npm install &>>$LOG_FILE
 VALIDATE $? "install dependencies" 
 
-cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>> LOG_FILE
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
 VALIDATE $? "copy systemctl service"
 
-systemctl daemon-reload &>> LOG_FILE
-systemctl enable catalogue &>> LOG_FILE
+systemctl daemon-reload &>>$LOG_FILE
+systemctl enable catalogue &>>$LOG_FILE
 VALIDATE $? "enable catologue" 
 
 systemctl start catalogue
 VALIDATE $? "start catalogue"
 
-cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo &>> LOG_FILE
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
 VALIDATE $? "copy mongo repo"
 
-dnf install mongodb-mongosh -y &>> LOG_FILE
+dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "install mongodb client"
 
 INDEX=$(mongosh mongodb.daws86s.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
