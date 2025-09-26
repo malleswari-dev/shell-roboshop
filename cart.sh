@@ -75,3 +75,7 @@ VALIDATE $? "enable cart"
 
 systemctl start cart &>>$LOG_FILE
 VALIDATE $? "start cart"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(( $END_TIME - $START_TIME))
+echo -e "script executed in:$Y  $TOTAL_TIME seconds $N"
