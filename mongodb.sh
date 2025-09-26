@@ -10,6 +10,7 @@ LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 # /var/log/shell-practice/16-logs/log
+START_TIME=$(date +%s)
 
 mkdir -p $LOGS_FOLDER
 echo "script started executed at:$(date)"  | tee -a $LOG_FILE
@@ -45,3 +46,7 @@ VALIDATE $? "Start MongoDB"
 
 systemctl restart mongod
 VALIDATE $? "Restarted MongoDB"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(( $END_TIME - $START_TIME))
+echo -e "script executed in:$Y  $TOTAL_TIME seconds $N"

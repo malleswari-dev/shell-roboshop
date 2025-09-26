@@ -12,6 +12,7 @@ SCRIPT_DIR=$PWD
 MONGODB_HOST=mongodb.malleswari.fun
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 # /var/log/shell-practice/16-logs/log
+START_TIME=$(date +%s)
 
 mkdir -p $LOGS_FOLDER
 echo "script started executed at:$(date)"  | tee -a $LOG_FILE
@@ -92,3 +93,7 @@ fi
 
 systemctl restart catalogue
 VALIDATE $? "restart catalogue"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(( $END_TIME - $START_TIME))
+echo -e "script executed in:$Y  $TOTAL_TIME seconds $N"
