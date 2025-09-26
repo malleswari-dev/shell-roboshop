@@ -46,3 +46,7 @@ VALIDATE $? "add user"
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOG_FILE
 VALIDATE $? "rabbitmq permissions"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(( $END_TIME - $START_TIME))
+echo -e "script executed in:$Y  $TOTAL_TIME seconds $N"
