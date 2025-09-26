@@ -31,7 +31,7 @@ VALIDATE () {
     fi
 }
 
-dnf install maven -y
+dnf install maven -y &>>$LOG_FILE
 VALIDATE $? "install maven"
 
 id roboshop &>>$LOG_FILE
@@ -42,40 +42,40 @@ else
 echo -e " user is already exist ... $Y SKIPPING $N"
 fi
 
-mkdir -p /app 
+mkdir -p /app &>>$LOG_FILE
 VALIDATE $? "creating app directory"
 
-curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
+curl -L -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip &>>$LOG_FILE
 VALIDATE $? "download code"
 
-cd /app 
+cd /app  &>>$LOG_FILE
 VALIDATE $? "changing to app directory"
 
-rm -rf /app/*
+rm -rf /app/* &>>$LOG_FILE
 VALIDATE $? "removing old code"
 
-unzip /tmp/shipping.zip
+unzip /tmp/shipping.zip &>>$LOG_FILE
 VALIDATE $? "unzip code"
 
-mvn clean package 
+mvn clean package &>>$LOG_FILE
 VALIDATE $? "cleaning package"
 
-mv target/shipping-1.0.jar shipping.jar 
+mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
 VALIDATE $? "moving to shipping.jar"
 
-cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service
+cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service &>>$LOG_FILE
 VALIDATE $? "copy systemd service"
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "daemon reload"
 
-systemctl enable shipping 
+systemctl enable shipping  &>>$LOG_FILE
 VALIDATE $? "enable shipping"
 
-systemctl start shipping
+systemctl start shipping &>>$LOG_FILE
 VALIDATE $? "start shipping"
 
-dnf install mysql -y
+dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "install mysql"
 
 mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e 'use cities' &>>$LOG_FILE
@@ -87,7 +87,7 @@ else
     echo -e "Shipping data is already loaded ... $Y SKIPPING $N"
 fi
 
-systemctl restart shipping
+systemctl restart shipping &>>$LOG_FILE
 VALIDATE $? "restart shipping"
 
 END_TIME=$(date +%s)
