@@ -48,7 +48,15 @@ VALIDATE $? "start rabbitmq"
 # else 
 #     echo -e "User roboshop already exist $Y SKIPPING $N "
 # fi
-rabbitmqctl add_user roboshop roboshop123 &>>$LOG_FILE
+
+id roboshop  &>>$LOG_FILE
+if [ $? -ne 0 ] ; then 
+    rabbitmqctl add_user roboshop roboshop123 &>>$LOG_FILE
+    VALIDATE $? "Adding user roboshop"
+else 
+    echo -e "User roboshop already exist $Y SKIPPING $N "
+fi
+#rabbitmqctl add_user roboshop roboshop123 &>>$LOG_FILE
 #VALIDATE $? "add user"
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOG_FILE
