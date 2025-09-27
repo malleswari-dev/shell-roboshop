@@ -63,3 +63,7 @@ VALIDATE $? "cp systemd service"
 
 systemctl restart nginx &>>$LOG_FILE
 VALIDATE $? "restart nginx"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(( $END_TIME - $START_TIME))
+echo -e "script executed in:$Y  $TOTAL_TIME seconds $N"
